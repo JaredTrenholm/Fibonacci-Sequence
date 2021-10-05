@@ -1,76 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fibonacci_Sequence
 {
     class Program
     {
-        static UInt64 firstValue;
-        static UInt64 secondValue;
-        static UInt64 thirdValue;
+        static UInt64 recursionOccurs = 0;
+        static UInt64[] storedResult = new UInt64[Int16.MaxValue-1];
 
-        static float firstFloat;
-        static float secondFloat;
-        static float thirdFloat;
         static void Main(string[] args)
         {
-            StartSequence();
-            Console.WriteLine();
-            Console.WriteLine("Returned Number: " + Fib(1));
-            Console.ReadKey(true);
-            Console.WriteLine("Returned Number: " + Fib(10));
-            Console.ReadKey(true);
-            Console.WriteLine("Returned Number: " + Fib(25));
-            Console.ReadKey(true);
-            Console.WriteLine("Returned Number: " + Fib(50));
-            Console.ReadKey(true);
-            Console.ReadKey(true);
+            StartSequence(0);
+            
         }
 
-        static void StartSequence()
+        static void StartSequence(UInt64 startPoint)
         {
-            firstValue = 0;
-            secondValue = 1;
-            thirdValue = firstValue + secondValue;
-
-            firstFloat = 0;
-            secondFloat = 1;
-            thirdFloat = firstFloat + secondFloat;
-
-            Console.WriteLine("The Sequence: " + firstValue);
-            Console.WriteLine("The Sequence: " + secondValue);
-            while (true)
+            Console.WriteLine();
+            UInt64 fibResult = 0;
+            for (UInt64 x = startPoint; fibResult < UInt64.MaxValue - fibResult; x++)
             {
-                Console.WriteLine("The Sequence: " + thirdValue+ "       Golden Ratio   " + thirdFloat / secondFloat);
-                firstValue = secondValue;
-                secondValue = thirdValue;
-                thirdValue = firstValue + secondValue;
-
-                firstFloat = secondFloat;
-                secondFloat = thirdFloat;
-                thirdFloat = firstFloat + secondFloat;
-
-                if (thirdValue >= UInt64.MaxValue - thirdValue)
-                {
-                    Console.WriteLine("The Sequence: " + thirdValue + "       Golden Ratio   " + thirdFloat / secondFloat);
-                    break;
-                }
+                fibResult = Fib(x);
+                storedResult[x] = fibResult;
+                Console.WriteLine("Amount of recursions: " + (recursionOccurs-1) + "     Fib Number " + (x) + ": " + fibResult);
+                recursionOccurs = 0;
             }
+            Console.ReadKey(true);
         }
 
         static UInt64 Fib(UInt64 value)
         {
-            if (value == 1)
+
+            recursionOccurs += 1;
+            if (storedResult[value] != 0)
+            {
+                return storedResult[value];
+            }
+
+            if (value == 0)
             {
                 return 0;
-            } else if(value == 2)
+            }
+            else if (value == 1)
             {
                 return 1;
             }
-            Console.WriteLine(value);
+            else if (value == 2)
+            {
+                return 2;
+            }
+
             return Fib(value-2) + Fib(value-1);
         }
     }
